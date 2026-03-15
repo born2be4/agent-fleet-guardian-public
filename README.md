@@ -114,7 +114,7 @@ Hephaestus is the infrastructure engineer. **Diagnoses before fixing. Always rev
 
 **Output format:**
 ```
-🔨 REPAIR: Rizz OOM crash loop
+🔨 REPAIR: Fleet OOM crash loop
 Diagnosis: V8 heap unlimited, 5 workers cycling at 230% CPU
 Fix: Recreated containers with NODE_OPTIONS=--max-old-space-size=900
 Status: ✅ Load 7.0 → 1.9, all 11 workers stable
@@ -323,4 +323,4 @@ MIT
 
 Built by [@born2be4](https://github.com/born2be4) as part of the OpenClaw agent ecosystem.
 
-Inspired by the operational experience of running 35+ AI agents in production for [Rizz](https://rizz.market) and [Semily](https://semily.ru).
+Inspired by the operational experience of running 35+ AI agents in production across multiple real-world organizations.

@@ -1,0 +1,46 @@
+services:
+  memory-db:
+    image: pgvector/pgvector:pg16
+    container_name: orchestrator-memory-db
+    restart: unless-stopped
+    ports:
+      - "5440:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-orchestrator}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-orchestrator}
+      POSTGRES_DB: ${POSTGRES_DB:-orchestrator}
+    volumes:
+      - memory-db-data:/var/lib/postgresql/data
+    networks:
+      - orchestrator-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U orchestrator"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  semantic-memory-api:
+    build:
+      context: memory-api
+      dockerfile: Dockerfile.memory-api
+    image: orchestrator-memory-api:latest
+    container_name: orchestrator-memory-api
+    restart: unless-stopped
+    ports:
+      - "18810:18800"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-orchestrator}:${POSTGRES_PASSWORD:-orchestrator}@memory-db:5432/${POSTGRES_DB:-orchestrator}
+      EMBED_MODEL: ${EMBED_MODEL:-nomic-ai/nomic-embed-text-v1.5-Q}
+    depends_on:
+      memory-db:
+        condition: service_healthy
+    networks:
+      - orchestrator-net
+
+volumes:
+  memory-db-data:
+
+networks:
+  orchestrator-net:
+    name: orchestrator-net
+    driver: bridge

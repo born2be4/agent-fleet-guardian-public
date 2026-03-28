@@ -15,15 +15,16 @@ When you run 10, 20, or 50+ AI agents across multiple machines, things break. Co
 Fleet Guardian provides:
 - **Audit Plane (Cerberus 🐕‍🔥)** — continuous security and architecture audits
 - **Repair Plane (Hephaestus 🔨)** — diagnostics, fixes, and infrastructure maintenance
+- **Message Hub (Fleet Hub 🌐)** — central message bus for inter-agent communication
 
-Both run as managed OpenClaw agents with their own SOUL, TOOLS, and cron schedules — zero human intervention required.
+All components run as managed OpenClaw agents/services with their own SOUL, TOOLS, and cron schedules — zero human intervention required.
 
 ## Architecture
 
 ```
 ┌──────────────────────────────────────────────────┐
 │                   ORCHESTRATOR (L1)               │
-│              (your main agent)             │
+│              (your main agent / Noks)             │
 │                                                   │
 │  ┌─────────────────┐   ┌──────────────────────┐  │
 │  │  CERBERUS 🐕‍🔥    │   │  HEPHAESTUS 🔨       │  │
@@ -52,6 +53,39 @@ Both run as managed OpenClaw agents with their own SOUL, TOOLS, and cron schedul
 │  └────────┘ └────────┘ └────────┘ └────────┘    │
 └──────────────────────────────────────────────────┘
 ```
+
+## 🌐 Fleet Message Hub
+
+When agents need to talk to each other across machines, Fleet Hub is the universal router.
+
+```
+Agent A (any machine)                          Agent B (any machine)
+       │                                              ▲
+       │  POST /message                               │  cron fires (~1 min)
+       ▼                                              │
+┌─────────────────────────────────────────────────────┐
+│                    Fleet Hub (:5679)                  │
+│                                                      │
+│  Registry: 41 agents across 4 macs                   │
+│  Routes:   local → cron add                          │
+│            remote L1 → SSH → cron add                │
+│            remote Docker → SSH → docker exec → cron  │
+│  Logs:     all messages tracked in-memory             │
+└─────────────────────────────────────────────────────┘
+```
+
+**Key endpoints:**
+- `POST /message` — send to any agent by ID
+- `POST /broadcast` — send to group (by mac or type)
+- `POST /status` — check agent health
+- `GET /registry` — full agent topology
+- `GET /logs` — message audit trail
+
+No SSH config needed in agents. No sessions_send. No relay scripts. One URL, one agent ID.
+
+Full documentation: [`fleet-hub/README.md`](fleet-hub/README.md)
+
+---
 
 ## The Two Planes
 
@@ -114,7 +148,7 @@ Hephaestus is the infrastructure engineer. **Diagnoses before fixing. Always rev
 
 **Output format:**
 ```
-🔨 REPAIR: Fleet OOM crash loop
+🔨 REPAIR: Rizz OOM crash loop
 Diagnosis: V8 heap unlimited, 5 workers cycling at 230% CPU
 Fix: Recreated containers with NODE_OPTIONS=--max-old-space-size=900
 Status: ✅ Load 7.0 → 1.9, all 11 workers stable
@@ -323,4 +357,4 @@ MIT
 
 Built by [@born2be4](https://github.com/born2be4) as part of the OpenClaw agent ecosystem.
 
-Inspired by the operational experience of running 35+ AI agents in production across multiple real-world organizations.
+Inspired by the operational experience of running 35+ AI agents in production for [Rizz](https://rizz.market) and [Semily](https://semily.ru).

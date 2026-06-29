@@ -1,0 +1,18 @@
+model:
+  provider: openai-codex
+  model: gpt-5.5
+providers: {}
+fallback_providers: []
+profile:
+  name: infra
+  role: infrastructure
+  passive_jobs_enabled: false
+logging:
+  level: INFO
+  max_size_mb: 10
+  backup_count: 5
+platforms:
+  telegram:
+    enabled: false
+    bot_username: '@your_infra_bot'
+    allowlist: []

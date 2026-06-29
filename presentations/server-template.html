@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Personal Hermes Agent Server Template</title>
+  <style>
+    :root { --bg:#111417; --paper:#f7f4ee; --ink:#1a1d20; --muted:#66707a; --line:#d8d0c2; --accent:#0d7c86; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--bg); color:var(--ink); }
+    main { height:100vh; overflow-y:auto; scroll-snap-type:y mandatory; }
+    section { min-height:100vh; padding:6vw; display:grid; align-content:center; scroll-snap-align:start; background:var(--paper); border-bottom:1px solid var(--line); }
+    section.dark { background:#12171d; color:#f8f5ee; }
+    h1 { font-size:clamp(42px,8vw,92px); line-height:.96; margin:0 0 24px; letter-spacing:0; max-width:1100px; }
+    h2 { font-size:clamp(30px,5vw,58px); line-height:1; margin:0 0 22px; letter-spacing:0; }
+    p { font-size:clamp(18px,2vw,25px); line-height:1.45; max-width:980px; }
+    .muted { color:var(--muted); } .dark .muted { color:#b9c3cc; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; max-width:1120px; margin-top:26px; }
+    .card { border:1px solid var(--line); border-radius:8px; padding:22px; background:rgba(255,255,255,.48); min-height:130px; }
+    .dark .card { border-color:#38434d; background:rgba(255,255,255,.06); }
+    .k { font-size:13px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); }
+    .dark .k { color:#b9c3cc; }
+    .v { font-size:24px; font-weight:700; margin-top:10px; }
+    table { border-collapse:collapse; width:min(1080px,100%); margin-top:20px; font-size:18px; }
+    th,td { text-align:left; padding:14px 12px; border-bottom:1px solid var(--line); vertical-align:top; }
+    .dark th,.dark td { border-color:#38434d; }
+    code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace; }
+  </style>
+</head>
+<body>
+<main>
+  <section class="dark">
+    <div class="k">Shareable template</div>
+    <h1>Personal Hermes Agent Server</h1>
+    <p class="muted">Обезличенный шаблон для коллег: роли агентов, автозапуск, память, безопасность, миграция и проверка без приватных данных.</p>
+  </section>
+  <section>
+    <h2>Что собираем</h2>
+    <div class="grid">
+      <div class="card"><div class="k">Host</div><div class="v">Mac mini, laptop, VPS or mini PC</div></div>
+      <div class="card"><div class="k">Runtime</div><div class="v">Hermes profiles</div></div>
+      <div class="card"><div class="k">Autostart</div><div class="v">launchd or systemd</div></div>
+      <div class="card"><div class="k">Security</div><div class="v">No secrets in Git</div></div>
+    </div>
+  </section>
+  <section class="dark">
+    <h2>Базовые профили</h2>
+    <table>
+      <tr><th>Profile</th><th>Purpose</th></tr>
+      <tr><td><code>infra</code></td><td>Ремонт, деплой, диагностика, серверные операции.</td></tr>
+      <tr><td><code>comms</code></td><td>Коммуникации, статусы, согласования, резюме.</td></tr>
+      <tr><td><code>analytics</code></td><td>Отчеты, таблицы, метрики, проверка чисел.</td></tr>
+      <tr><td><code>content</code></td><td>Посты, PR, каналы, медиа и артефакты.</td></tr>
+    </table>
+  </section>
+  <section>
+    <h2>Правила безопасности</h2>
+    <p>Секреты остаются локально. В Git идут только шаблоны, инструкции, обезличенные runbooks и проверочные скрипты. Перед публикацией запускается <code>scripts/sanitize-scan.sh</code>.</p>
+  </section>
+  <section class="dark">
+    <h2>Как стартовать</h2>
+    <table>
+      <tr><th>Step</th><th>Action</th></tr>
+      <tr><td>1</td><td>Создать директории через <code>scripts/bootstrap-macos.sh</code>.</td></tr>
+      <tr><td>2</td><td>Установить Hermes по официальной инструкции.</td></tr>
+      <tr><td>3</td><td>Скопировать профиль из <code>examples/profiles</code>.</td></tr>
+      <tr><td>4</td><td>Подключить launchd/systemd.</td></tr>
+      <tr><td>5</td><td>Проверить healthcheck и live smoke.</td></tr>
+    </table>
+  </section>
+</main>
+</body>
+</html>

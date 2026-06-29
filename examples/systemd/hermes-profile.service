@@ -1,0 +1,15 @@
+[Unit]
+Description=Hermes profile gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=%h/.hermes/profiles/infra
+ExecStart=%h/.hermes/hermes-agent/venv/bin/python -m hermes_cli.main --profile infra gateway run --replace
+Restart=always
+RestartSec=5
+EnvironmentFile=%h/.hermes/profiles/infra/.env
+
+[Install]
+WantedBy=default.target
